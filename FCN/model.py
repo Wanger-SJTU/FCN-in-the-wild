@@ -1,6 +1,7 @@
 
 
 import torch
+import torch.nn as nn
 import numpy as np
 import torchvision.models as models
 
@@ -8,11 +9,142 @@ from torch.autograd import Variable
 from torchvision import datasets, models, transforms
 
 
-class CAN(torch.nn):
+class FCN(nn.Module):
 
-	def __init__(self):
-		pass
+  def __init__(self, n_classes = 21):
+    super(FCN, self).__init__()
+    self.front_end = nn.Sequential(
+      # layer_1
+      nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=0, bias=True),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=0, bias=True),
+      nn.ReLU(inplace=True),
+      nn.MaxPool2d(kernel_size=2, stride=2),
+      #layer_2
+      nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=0, bias=True),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0, bias=True),
+      nn.ReLU(inplace=True),
+      nn.MaxPool2d(kernel_size=2, stride=2),
+      #layer_3                        
+      nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=0, bias=True),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=0, bias=True),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=0, bias=True),
+      nn.ReLU(inplace=True),
+      nn.MaxPool2d(kernel_size=2, stride=2),
+      #layer_4
+      nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=0, bias=True, dilation=2),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=0, bias=True, dilation=2),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=0, bias=True, dilation=2),
+      nn.ReLU(inplace=True),
+      #layer_5            
+      nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=0, bias=True, dilation=2),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=0, bias=True, dilation=2),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=0, bias=True, dilation=2),
+      nn.ReLU(inplace=True),
+      
+      # fc6 layer
+      nn.Conv2d(512, 4096, kernel_size=3, stride=1, padding=0, bias=True, dilation=4), 
+      nn.ReLU(inplace=True),
+      
+      # nn.Dropout(),
+      
+      # fc7 layer
+      nn.Conv2d(4096, 4096, kernel_size=1, stride=1, padding=0, bias=True), 
+      nn.ReLU(inplace=True),
+     
+      # nn.Dropout(),
+      
+      # final layer
+      nn.Conv2d(4096, 21, kernel_size=1, stride=1, padding=0, bias=True), 
+      nn.ReLU(inplace=True),
+     )
+        
+    # self.multi_context = nn.Sequential(    
+    #     nn.ZeroPad2d(1),
+        
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True), #ctx_conv
+    #     nn.ReLU(inplace=True),
+    #     nn.ZeroPad2d(1),
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True),
+    #     nn.ReLU(inplace=True),
+        
+    #     nn.ZeroPad2d(2),
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=2),
+    #     nn.ReLU(inplace=True),
+       
+    #     nn.ZeroPad2d(4),
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=4),
+    #     nn.ReLU(inplace=True),
+        
+    #     nn.ZeroPad2d(8),
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=8),
+    #     nn.ReLU(inplace=True),
+        
+                    
+    #     nn.ZeroPad2d(16),
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=16),
+    #     nn.ReLU(inplace=True),
+        
+                                
+    #     nn.ZeroPad2d(32),
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=32),
+    #     nn.ReLU(inplace=True),
+        
+                                
+    #     nn.ZeroPad2d(64),
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=64),
+    #     nn.ReLU(inplace=True),
+        
+                               
 
+    #     nn.ZeroPad2d(1),
+    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True),
+    #     nn.ReLU(inplace=True)
+    #     )
 
-	def forward(self):
-		pass
+    self.upsample = nn.Sequential(       
+        # nn.Conv2d(19, 19, kernel_size=1, stride=1, padding=0, bias=True),
+        
+        nn.Upsample(factor_scale=8, mode='bilinear'),    
+        
+        # nn.Conv2d(21, 21, kernel_size=16, stride=1, padding=7, bias=False),
+        # nn.ReLU(inplace=True),
+        
+        # nn.Softmax(dim=1)
+  )
+
+  def forward(self, x, transfer=False):
+    
+    feature_map = self.front_end(x)
+    if transfer:
+      return feature_map
+    
+    predict = self.upsample(feature_map)
+
+    return predict
+
+  def _initialize_weights(self):
+    for m in self.modules():
+      if isinstance(m, nn.Conv2d):
+        m.weight.data.zero_()
+        if m.bias is not None:
+          m.bias.data.zero_()
+
+  def copy_para_from_vgg16(self, vgg16):
+    for name, l1 in vgg16.named_children():
+      try:
+        l2 = getattr(self, name)
+        l2.weight
+      except Exception as e:
+        continue
+      assert l1.weight.size() == l2.weight.size()
+      assert l1.bias.size() == l2.bias.size()
+      l2.weight.data.copy_(l1.weight.data)
+      l2.bias.data.copy_(l1.bias.data)
