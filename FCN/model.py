@@ -3,10 +3,10 @@
 import torch
 import torch.nn as nn
 import numpy as np
-import torchvision.models as models
+# import torchvision.models as models
 
 from torch.autograd import Variable
-from torchvision import datasets, models, transforms
+# from torchvision import datasets, models, transforms
 
 
 class FCN(nn.Module):
@@ -62,7 +62,8 @@ class FCN(nn.Module):
       # nn.Dropout(),
       
       # final layer
-      nn.Conv2d(4096, 21, kernel_size=1, stride=1, padding=0, bias=True), 
+      nn.Conv2d(4096, 21, kernel_size=1, stride=1, padding=0, bias=True),
+      nn.Conv2d(21, 1, kernel_size=1, stride=1, padding=0, bias=True), 
       nn.ReLU(inplace=True),
      )
         

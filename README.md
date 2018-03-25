@@ -11,3 +11,7 @@ The FCN model used is papre [Multi-scale context aggregation by dilated convolut
 ### training
 
 ### examples
+
+
+## note 
+In the [GTA5 dataset](https://download.visinf.tu-darmstadt.de/data/from_games/), the label file is png format which uses palette, so to train the model should record the palette infomation to recover the output  with color

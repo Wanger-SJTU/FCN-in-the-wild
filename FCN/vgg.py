@@ -23,7 +23,8 @@ def VGG16(pretrained = False):
 
 def _get_vgg16_pretrained_model():
 
-  file_path = osp.join(os.getcwd(), 'vgg16_from_caffe.pth')
+  file_path = osp.join(os.getcwd(), 'pretrain_model','vgg16_from_caffe.pth')
+  
   if not os.path.exists(file_path):
     try:
       #pdb.set_trace()
