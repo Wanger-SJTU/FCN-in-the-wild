@@ -6,7 +6,9 @@ import os.path as osp
 
 import torch
 
-import torchfcn
+from data.GTA5 import GTA5
+from FCN.model import FCN
+from FCN.trainer import Trainer
 
 # from train_fcn32s import get_log_dir
 # from train_fcn32s import get_parameters
@@ -35,6 +37,8 @@ def main():
     parser.add_argument('-c', '--config', type=int, default=1,
                         choices=configurations.keys())
     parser.add_argument('--resume', help='Checkpoint path')
+    parser.add_argument('-transfer', type=bool, default=False)
+
     args = parser.parse_args()
 
     gpu = args.gpu
@@ -45,27 +49,28 @@ def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu)
     cuda = torch.cuda.is_available()
 
-    torch.manual_seed(1337)
+    torch.manual_seed(1123)
+    
     if cuda:
-        torch.cuda.manual_seed(1337)
+        torch.cuda.manual_seed(1123)
 
     # 1. dataset
-
     root = osp.expanduser('~/data/datasets')
     kwargs = {'num_workers': 4, 'pin_memory': True} if cuda else {}
+    
     train_loader = torch.utils.data.DataLoader(
-        torchfcn.datasets.SBDClassSeg(root, split='train', transform=True),
+        GTA5(root, split='train', transform=False),
         batch_size=1, shuffle=True, **kwargs)
     val_loader = torch.utils.data.DataLoader(
-        torchfcn.datasets.VOC2011ClassSeg(
-            root, split='seg11valid', transform=True),
+        GTA5(root, split='seg11valid', transform=True),
         batch_size=1, shuffle=False, **kwargs)
 
     # 2. model
-
-    model = torchfcn.models.FCN16s(n_class=21)
+    model = FCN(n_class=34)
     start_epoch = 0
     start_iteration = 0
+    
+    ######### todo
     if resume:
         checkpoint = torch.load(resume)
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -79,7 +84,6 @@ def main():
         model = model.cuda()
 
     # 3. optimizer
-
     optim = torch.optim.SGD(
         [
             {'params': get_parameters(model, bias=False)},
@@ -89,10 +93,11 @@ def main():
         lr=cfg['lr'],
         momentum=cfg['momentum'],
         weight_decay=cfg['weight_decay'])
+    
     if resume:
         optim.load_state_dict(checkpoint['optim_state_dict'])
 
-    trainer = torchfcn.Trainer(
+    trainer = Trainer(
         cuda=cuda,
         model=model,
         optimizer=optim,
@@ -108,4 +113,6 @@ def main():
 
 
 if __name__ == '__main__':
+    from __init_path__ import add_full_path
+    add_full_path()
     main()

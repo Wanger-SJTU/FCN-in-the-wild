@@ -7,12 +7,15 @@ def add_path(path):
 
 this_dir = osp.dirname(__file__)
 
-# Add lib to PYTHONPATH
-model_path = osp.join(this_dir, 'FCN')
-add_path(model_path)
 
-data_path = osp.join(this_dir, 'data')
-add_path(data_path)
 
-util_path = osp.join(this_dir, 'utils')
-add_path(util_path)
+
+def add_full_path():
+  model_path = osp.join(this_dir, 'FCN')
+  add_path(model_path)
+
+  data_path = osp.join(this_dir, 'data')
+  add_path(data_path)
+
+  util_path = osp.join(this_dir, 'utils')
+  add_path(util_path)

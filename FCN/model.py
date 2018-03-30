@@ -11,7 +11,7 @@ from torch.autograd import Variable
 
 class FCN(nn.Module):
 
-  def __init__(self, n_classes = 21):
+  def __init__(self, n_classes = 35):
     super(FCN, self).__init__()
     self.front_end = nn.Sequential(
       # layer_1
@@ -62,8 +62,7 @@ class FCN(nn.Module):
       # nn.Dropout(),
       
       # final layer
-      nn.Conv2d(4096, 21, kernel_size=1, stride=1, padding=0, bias=True),
-      nn.Conv2d(21, 1, kernel_size=1, stride=1, padding=0, bias=True), 
+      nn.Conv2d(4096, n_classes, kernel_size=1, stride=1, padding=0, bias=True),
       nn.ReLU(inplace=True),
      )
         
@@ -119,7 +118,7 @@ class FCN(nn.Module):
         # nn.ReLU(inplace=True),
         
         # nn.Softmax(dim=1)
-  )
+    )
 
   def forward(self, x, transfer=False):
     
