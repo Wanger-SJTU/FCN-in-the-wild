@@ -8,5 +8,6 @@ utils\__pycache__
 __pycache__
 data\__pycache__\
 data\__pycache__
+data\GTA5\
 log
 visualization_viz
