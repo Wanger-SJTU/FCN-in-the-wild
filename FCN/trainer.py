@@ -8,13 +8,17 @@ import numpy as np
 import pytz
 import scipy.misc
 import torch
+import pdb
+
 from torch.autograd import Variable
 import torch.nn.functional as F
 import tqdm
-from data.utils import get_num_classes
-from utils.utils import label_accuracy_score
+from utils.util import label_accuracy_score
+from data.data_utils import get_num_classes
+from data.data_utils import index2rgb
+from data.data_utils import resize_output
 from logger import Logger
-from data.utils import index2rgb
+
 def cross_entropy2d(input, target, weight=None, size_average=True):
   # input: (n, c, h, w), target: (n, h, w)
   n, c, h, w = input.size()
@@ -118,10 +122,10 @@ class Trainer(object):
         label_trues.append(lt)
         label_preds.append(lp)
         
-        if len(visualizations) < 9:
-          viz = fcn.utils.visualize_segmentation(
-            lbl_pred=lp, lbl_true=lt, img=img, n_class=n_class)
-          visualizations.append(viz)
+        # if len(visualizations) < 9:
+        #   viz = fcn.utils.visualize_segmentation(
+        #     lbl_pred=lp, lbl_true=lt, img=img, n_class=n_class)
+        #   visualizations.append(viz)
     
     metrics = label_accuracy_score(label_trues, label_preds, n_class)
 
@@ -130,7 +134,7 @@ class Trainer(object):
     if not osp.exists(out):
       os.makedirs(out)
     out_file = osp.join(out, 'iter%012d.jpg' % self.iteration)
-    scipy.misc.imsave(out_file, fcn.utils.get_tile_image(visualizations))
+    # scipy.misc.imsave(out_file, fcn.utils.get_tile_image(visualizations))
 
     val_loss /= len(self.val_loader)
 

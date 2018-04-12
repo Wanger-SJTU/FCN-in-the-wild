@@ -112,7 +112,7 @@ class FCN(nn.Module):
     self.upsample = nn.Sequential(       
         # nn.Conv2d(19, 19, kernel_size=1, stride=1, padding=0, bias=True),
         
-        nn.Upsample(factor_scale=8, mode='bilinear'),    
+        nn.Upsample(size=(1000), mode='bilinear'),    
         
         # nn.Conv2d(21, 21, kernel_size=16, stride=1, padding=7, bias=False),
         # nn.ReLU(inplace=True),

@@ -1,6 +1,6 @@
 
 import numpy as np
-
+from PIL import Image as image
 
 
 
@@ -76,3 +76,9 @@ def get_lable(i):
 
 def get_num_classes():
   return len(classes)
+
+def resize_input(img):
+  return img.resize((1000,1000),resample=image.BILINEAR)
+
+def resize_output(img, size=(1052, 1914)):
+  return img.resize(size,resample=image.BILINEAR)

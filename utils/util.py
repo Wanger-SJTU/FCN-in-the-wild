@@ -1,6 +1,7 @@
 import numpy as np
 
-
+import pdb
+_debug = False
 def _fast_hist(label_true, label_pred, n_class):
     mask = (label_true >= 0) & (label_true < n_class)
     hist = np.bincount(
@@ -17,6 +18,8 @@ def label_accuracy_score(label_trues, label_preds, n_class):
       - mean IU
       - fwavacc
     """
+    if _debug:
+        pdb.set_trace()
     hist = np.zeros((n_class, n_class))
     for lt, lp in zip(label_trues, label_preds):
         hist += _fast_hist(lt.flatten(), lp.flatten(), n_class)

@@ -10,8 +10,9 @@ import scipy.io as sio
 
 from PIL import Image as image
 from torch.utils import data
+from data.data_utils import get_num_classes
+from data.data_utils import resize_input
 
-# from data.utils import get_num_classes
 
 mean_bgr = np.array([104.00698793, 116.66876762, 122.67891434])
 
@@ -53,12 +54,14 @@ class GTA5(data.Dataset):
   def __getitem__(self, index):
     data_file = self.files[self.split][index]
     # load image
-    img_file = data_file['img']
-    img = PIL.Image.open(img_file)
+    img_file = data_file['img'].strip()
+    img = image.open(img_file)
+    img = resize_input(img)
     img = np.array(img, dtype=np.uint8)
     # load label
-    lbl_file = data_file['lbl']
-    lbl = PIL.Image.open(lbl_file)
+    lbl_file = data_file['lbl'].strip()
+    lbl = image.open(lbl_file)
+    lbl = resize_input(lbl)
     lbl = np.array(lbl, dtype=np.uint8)
     if self._transform:
       return self.transform(img, lbl)
@@ -68,7 +71,7 @@ class GTA5(data.Dataset):
   def transform(self, img, lbl):
     img = img[:, :, ::-1]  # RGB -> BGR
     img = img.astype(np.float64)
-    img -= self.mean_bgr
+    img -= mean_bgr
     img = img.transpose(2, 0, 1)
     img = torch.from_numpy(img).float()
     lbl = torch.from_numpy(lbl).long()
@@ -77,7 +80,7 @@ class GTA5(data.Dataset):
   def untransform(self, img, lbl):
     img = img.numpy()
     img = img.transpose(1, 2, 0)
-    img += self.mean_bgr
+    img += mean_bgr
     img = img.astype(np.uint8)
     img = img[:, :, ::-1]
     lbl = lbl.numpy()
