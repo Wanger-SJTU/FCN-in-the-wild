@@ -75,10 +75,19 @@ def get_lable(i):
   return classes[labelClasses[i]]
 
 def get_num_classes():
-  return len(classes)
+  return max(labelClasses)
 
 def resize_input(img):
   return img.resize((1000,1000),resample=image.BILINEAR)
 
 def resize_output(img, size=(1052, 1914)):
+  # pdb.set_trace()
+  if isinstance(img, torch.FloatTensor):
+    np_array = img.numpy().astype('uint8')
+    np_array = np_array.transpose((1,2,0))
+    img = image.fromarray(np_array,mode='RGB')
+  elif isinstance(img, np.ndarray):
+    # print(img.shape)
+    img = image.fromarray(img,mode='RGB')
+  # print(type(img))
   return img.resize(size,resample=image.BILINEAR)

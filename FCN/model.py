@@ -6,12 +6,13 @@ import numpy as np
 # import torchvision.models as models
 
 from torch.autograd import Variable
+from data.data_utils import get_num_classes
 # from torchvision import datasets, models, transforms
 
 
 class FCN(nn.Module):
 
-  def __init__(self, n_classes = 35):
+  def __init__(self, n_classes = get_num_classes()):
     super(FCN, self).__init__()
     self.front_end = nn.Sequential(
       # layer_1

@@ -197,6 +197,7 @@ class Trainer(object):
       loss = cross_entropy2d(score, target,
                    size_average=self.size_average)
       loss /= len(data)
+      
       if np.isnan(float(loss.data[0])):
         raise ValueError('loss is nan while training')
       
@@ -226,13 +227,13 @@ class Trainer(object):
       for tag, value in info.items():
         logger.scalar_summary(tag, value, iteration+1)
 
-      info={
-      'origin' : data.data[0].cpu(),
-      'lbl_true': index2rgb(lbl_true[0]),
-      'lbl_pred': index2rgb(lbl_pred[0])
-      }
-      for tag, value in info.items():
-        logger.scalar_summary(tag, value, iteration+1)
+      # info={
+      # 'origin' : data.data[0].cpu(),
+      # 'lbl_true': index2rgb(lbl_true[0]),
+      # 'lbl_pred': index2rgb(lbl_pred[0])
+      # }
+      # for tag, value in info.items():
+      #   logger.scalar_summary(tag, value, iteration+1)
       ################################
       with open(osp.join(self.out, 'log.csv'), 'a') as f:
         elapsed_time = (
