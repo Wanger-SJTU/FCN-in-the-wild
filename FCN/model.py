@@ -6,13 +6,13 @@ import numpy as np
 # import torchvision.models as models
 
 from torch.autograd import Variable
-from data.data_utils import get_num_classes
+from data.data_utils import get_label_classes
 # from torchvision import datasets, models, transforms
 
 
 class FCN(nn.Module):
 
-  def __init__(self, n_classes = get_num_classes()):
+  def __init__(self, n_classes = len(get_label_classes)):
     super(FCN, self).__init__()
     self.front_end = nn.Sequential(
       # layer_1
@@ -66,59 +66,10 @@ class FCN(nn.Module):
       nn.Conv2d(4096, n_classes, kernel_size=1, stride=1, padding=0, bias=True),
       nn.ReLU(inplace=True),
      )
-        
-    # self.multi_context = nn.Sequential(    
-    #     nn.ZeroPad2d(1),
-        
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True), #ctx_conv
-    #     nn.ReLU(inplace=True),
-    #     nn.ZeroPad2d(1),
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True),
-    #     nn.ReLU(inplace=True),
-        
-    #     nn.ZeroPad2d(2),
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=2),
-    #     nn.ReLU(inplace=True),
-       
-    #     nn.ZeroPad2d(4),
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=4),
-    #     nn.ReLU(inplace=True),
-        
-    #     nn.ZeroPad2d(8),
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=8),
-    #     nn.ReLU(inplace=True),
-        
-                    
-    #     nn.ZeroPad2d(16),
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=16),
-    #     nn.ReLU(inplace=True),
-        
-                                
-    #     nn.ZeroPad2d(32),
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=32),
-    #     nn.ReLU(inplace=True),
-        
-                                
-    #     nn.ZeroPad2d(64),
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True, dilation=64),
-    #     nn.ReLU(inplace=True),
-        
-                               
-
-    #     nn.ZeroPad2d(1),
-    #     nn.Conv2d(19, 19, kernel_size=3, stride=1, padding=0, bias=True),
-    #     nn.ReLU(inplace=True)
-    #     )
 
     self.upsample = nn.Sequential(       
         # nn.Conv2d(19, 19, kernel_size=1, stride=1, padding=0, bias=True),
-        
         nn.Upsample(size=(1000), mode='bilinear'),    
-        
-        # nn.Conv2d(21, 21, kernel_size=16, stride=1, padding=7, bias=False),
-        # nn.ReLU(inplace=True),
-        
-        # nn.Softmax(dim=1)
     )
 
   def forward(self, x, transfer=False):

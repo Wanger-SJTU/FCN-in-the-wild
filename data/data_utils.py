@@ -74,8 +74,8 @@ def index2rgb(indexed, palette=colors):
 def get_lable(i):
   return classes[labelClasses[i]]
 
-def get_num_classes():
-  return max(labelClasses)
+def get_label_classes():
+  return labelClasses
 
 def resize_input(img):
   return img.resize((1000,1000),resample=image.BILINEAR)
@@ -91,3 +91,6 @@ def resize_output(img, size=(1052, 1914)):
     img = image.fromarray(img,mode='RGB')
   # print(type(img))
   return img.resize(size,resample=image.BILINEAR)
+
+if __name__ == '__main__':
+  print(len(colors), len(labelClasses))

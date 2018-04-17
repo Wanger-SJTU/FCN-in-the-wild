@@ -9,7 +9,7 @@ import datetime
 
 from data.GTA5 import GTA5
 from FCN.model import FCN
-from FCN.trainer import Trainer
+from FCN.new_trainer import Trainer
 from data.data_utils  import get_num_classes
 from FCN.vgg import VGG16
 import pdb 

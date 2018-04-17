@@ -2,6 +2,7 @@ import numpy as np
 
 import pdb
 _debug = False
+
 def _fast_hist(label_true, label_pred, n_class):
     mask = (label_true >= 0) & (label_true < n_class)
     hist = np.bincount(
@@ -12,7 +13,6 @@ def _fast_hist(label_true, label_pred, n_class):
 
 def label_accuracy_score(label_trues, label_preds, n_class):
     """Returns accuracy score evaluation result.
-
       - overall accuracy
       - mean accuracy
       - mean IU
