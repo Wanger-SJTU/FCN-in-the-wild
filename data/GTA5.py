@@ -10,7 +10,7 @@ import scipy.io as sio
 
 from PIL import Image as image
 from torch.utils import data
-from data.data_utils import get_num_classes
+from data.data_utils import get_label_classes
 from data.data_utils import resize_input
 
 
@@ -22,37 +22,38 @@ class GTA5(data.Dataset):
   def __init__(self, root, split='train', transform=False):
     super(GTA5, self).__init__()
     
-    self.root = root
-    self.split = split
+    self.root = osp.join(self.root, 'GTA5')
+    if split != 'train':
+      self.split = 'val'
+    else:
+      self.split = 'train'
     self._transform = transform
 
-    #GTA5 dataset dir
+    # GTA5 dataset dir
     # GTA5 dataset direcory structer
     
-    dataset_dir = osp.join(self.root, 'GTA5')
+    dataset_dir = osp.join(self.root, self.split)
     self.files = collections.defaultdict(list)
 
-    for split in ['train', 'val']:
-      imageset_files = osp.join(dataset_dir,
-        '{dir}/{file}.txt'.format(dir=split, file=split))
-      with open(imageset_files) as f:
-        for file in f:
-          img_file = osp.join(dataset_dir,
-            '{split}/images/{file_name}'.format(split=split,file_name=file))
-          lbl_file = osp.join(dataset_dir,
-            '{split}/labels/{file_name}'.format(split=split,file_name=file))
-          self.files[split].append({
-            'img':img_file,
-            'lbl':lbl_file,})
-    self.n_classes = get_num_classes()
-
-  
+    # for split in ['train', 'val']:
+    imageset_files = osp.join(dataset_dir,
+      '{file}.txt'.format(file=self.split))
+    with open(imageset_files) as f:
+      for file in f:
+        img_file = osp.join(dataset_dir,
+          '{split}/images/{file_name}'.format(split=split,file_name=file))
+        lbl_file = osp.join(dataset_dir,
+          '{split}/labels/{file_name}'.format(split=split,file_name=file))
+        self.files.append({
+          'img':img_file,
+          'lbl':lbl_file,})
+    
   def __len__(self):
     return len(self.files[self.split])
 
 
   def __getitem__(self, index):
-    data_file = self.files[self.split][index]
+    data_file = self.files[index]
     # load image
     img_file = data_file['img'].strip()
     img = image.open(img_file)
@@ -85,8 +86,3 @@ class GTA5(data.Dataset):
     img = img[:, :, ::-1]
     lbl = lbl.numpy()
     return img, lbl
-
-if __name__ == '__main__':
-  sys.path.append(os.getcwd())
-  from utils import get_num_classes
-  print(get_num_classes())

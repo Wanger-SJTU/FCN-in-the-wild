@@ -10,7 +10,7 @@ import numpy as np
 from torch.autograd import Variable
 import torch.nn.functional as F
 
-from data import GTA5
+from data.GTA5 import GTA5
 from data.data_utils import get_num_classes
 from data.data_utils import index2rgb
 from utils.criterion import CrossEntropyLoss2d

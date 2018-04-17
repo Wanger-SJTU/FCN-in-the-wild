@@ -18,11 +18,11 @@ configurations = {
 	# same configuration as original work
 	# https://github.com/shelhamer/fcn.berkeleyvision.org
 	1: dict(
-		max_iteration=100000,
+		max_iteration=200000,
 		lr=1.0e-12,
 		momentum=0.99,
 		weight_decay=0.0005,
-		interval_validate=4000,
+		interval_validate=5000,
 		# fcn32s_pretrained_model=torchfcn.models.FCN32s.download(),
 	)
 }
@@ -92,7 +92,7 @@ def main():
 		batch_size=1, shuffle=False, **kwargs)
 
 	# model
-	model = FCN(n_classes=get_num_classes())
+	model = FCN()
 	start_epoch = 0
 	start_iteration = 0
 

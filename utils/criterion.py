@@ -11,12 +11,12 @@ class CrossEntropyLoss2d(nn.Module):
     self.loss = nn.NLLLoss2d(weight)
 
   def forward(self, outputs, targets):
-    n,c,w,h = outputs.size()
-    for i in range(c):
-      if i in labels:
-        continue
-      else:
-        outputs[:,i,:,:] = 0
+    # n,c,w,h = outputs.size()
+    # for i in range(c):
+    #   if i in labels:
+    #     continue
+    #   else:
+    #     outputs[:,i,:,:] = 0
     return self.loss(F.log_softmax(outputs), targets)
 
 def domain_classifer_loss(source, target):
