@@ -14,38 +14,6 @@ classes = [
     'rider', 'car','truck','bus' ,'caravan', 
     'trailer','train', 'motorcycle' 'bicycle','license plate']
 
-  #################################################
-  # ----------------------------------------------#
-  # 64 128 64 | 192 0 128 | 0 128 192 | 0 128 64  |
-  # Animal    | Archway   | Bicyclist | bridge    |
-  # -----------------------------------------------
-  # 128 0 0   | 64 0 128  | 64 0 192              |
-  # building  | Car       | CartLuggagePram       |
-  # ----------------------------------------------- 
-  # 192 128 64| 192 192 128 | 64 64 128 | 128 0 192
-  # Child     | Column_Pole | fence     |LaneMkgsDriv
-  # -------------------------------------------------   
-  # 192 0 64  LaneMkgsNonDriv
-  # 128 128 64  Misc_Text
-  # 192 0 192 MotorcycleScooterp
-  # 128 64 64 OtherMoving
-  # 64 192 128  ParkingBlock
-  # 64 64 0   Pedestrian
-  # 128 64 128  Road
-  # 128 128 192 RoadShoulder
-  # 0 0 192   Sidewalk
-  # 192 128 128 SignSymbol
-  # 128 128 128 Sky
-  # 64 128 192  SUVPickupTruck
-  # 0 0 64    TrafficCone
-  # 0 64 64   TrafficLight
-  # 192 64 128  Train
-  # 128 128 0 Tree
-  # 192 128 192 Truck_Bus
-  # 64 0 64   Tunnel
-  # 192 192 0 VegetationMisc
-  # 0 0 0   Void
-  # 64 192 0  Wall
 colors = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],           \
           [20, 20, 20], [111, 74, 0], [81, 0, 81],              \
           [128, 64, 128], [244, 35, 232], [250, 170, 160],      \

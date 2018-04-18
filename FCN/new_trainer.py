@@ -11,7 +11,7 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 
 from data.GTA5 import GTA5
-from data.data_utils import get_num_classes
+from data.data_utils import get_label_classes
 from data.data_utils import index2rgb
 from utils.criterion import CrossEntropyLoss2d
 from utils.util import label_accuracy_score
@@ -64,7 +64,7 @@ class Trainer(object):
     training = self.model.training
     self.model.eval()
 
-    n_class = lrn(get_num_classes())
+    n_class = max(get_label_classes())
 
     val_loss = 0
     visualizations = []
@@ -135,7 +135,7 @@ class Trainer(object):
   def train_epoch(self):
     self.model.train()
 
-    n_class = get_num_classes()
+    n_class = max(get_label_classes())
     train_loss = 0
     for batch_idx, (data, target) in tqdm.tqdm(
         enumerate(self.train_loader), total=len(self.train_loader),
@@ -204,10 +204,10 @@ class Trainer(object):
         title = 'input: (epoch: %d, step: %d)' % (self.epoch,step)
         vis.image(image, win=win1, env='fcn', opts=dict(title=title))
         title = 'output (epoch: %d, step: %d)' % (self.epoch,step)
-        vis.image(index2rgb(outputs[0].cpu().max(0)[1].data),
+        vis.image(index2rgb(lbl_pred[0]),
                   win=win2, env='fcn', opts=dict(title=title))
         title = 'target (epoch: %d, step: %d)' % (self.epoch,step)
-        vis.image(index2rgb(targets.cpu().data),
+        vis.image(index2rgb(lbl_true[0]),
                   win=win3, env='fcn', opts=dict(title=title))
         epoch_loss = train_loss / 100
         x = np.arange(1, len(epoch_loss) + 1, 1)
@@ -215,7 +215,7 @@ class Trainer(object):
         vis.line(np.array(epoch_loss), x, env='fcn', win=win0,
                  opts=dict(title=title))
       
-    
+        train_loss = 0
       if self.iteration >= self.max_iter:
         break
 

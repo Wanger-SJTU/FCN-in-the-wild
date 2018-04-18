@@ -10,20 +10,17 @@ import datetime
 from data.GTA5 import GTA5
 from FCN.model import FCN
 from FCN.new_trainer import Trainer
-from data.data_utils  import get_num_classes
+from data.data_utils  import get_label_classes
 from FCN.vgg import VGG16
 import pdb 
 
 configurations = {
-	# same configuration as original work
-	# https://github.com/shelhamer/fcn.berkeleyvision.org
 	1: dict(
 		max_iteration=200000,
 		lr=1.0e-12,
 		momentum=0.99,
 		weight_decay=0.0005,
 		interval_validate=5000,
-		# fcn32s_pretrained_model=torchfcn.models.FCN32s.download(),
 	)
 }
 
@@ -39,9 +36,6 @@ def get_parameters(model, bias=False):
 		nn.Dropout2d,
 		nn.Sequential,
 		nn.Upsample
-		# torchfcn.models.FCN32s,
-		# torchfcn.models.FCN16s,
-		# torchfcn.models.FCN8s,
 	)
 	#pdb.set_trace()
 	for m in model.modules():

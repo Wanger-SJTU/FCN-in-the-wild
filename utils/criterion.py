@@ -2,23 +2,27 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from data.data_utils import labelClasses
-labels = labelClasses()
-class CrossEntropyLoss2d(nn.Module):
+# from data.data_utils import labelClasses
+# labels = labelClasses()
+# class CrossEntropyLoss2d(nn.Module):
 
-  def __init__(self, weight=None):
-    super(CrossEntropyLoss2d,self).__init__()
-    self.loss = nn.NLLLoss2d(weight)
+#   def __init__(self, weight=None):
+#     super(CrossEntropyLoss2d,self).__init__()
+#     self.loss = nn.NLLLoss2d(weight)
 
-  def forward(self, outputs, targets):
-    # n,c,w,h = outputs.size()
-    # for i in range(c):
-    #   if i in labels:
-    #     continue
-    #   else:
-    #     outputs[:,i,:,:] = 0
-    return self.loss(F.log_softmax(outputs), targets)
+#   def forward(self, outputs, targets):
+#     # n,c,w,h = outputs.size()
+#     # for i in range(c):
+#     #   if i in labels:
+#     #     continue
+#     #   else:
+#     #     outputs[:,i,:,:] = 0
+#     return self.loss(F.log_softmax(outputs), targets)
 
+def CrossEntropyLoss2d(outputs, targets):
+  loss = nn.NLLLoss2d()
+  return loss(F.log_softmax(outputs), targets)
+  
 def domain_classifer_loss(source, target):
 
   assert source.size() == target.size()

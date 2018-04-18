@@ -1,10 +1,10 @@
 tensorflow==1.2.1
 tqdm==4.19.9
-torch==0.3.1.post2
+pytorch==0.3.1
 pytz==2017.3
 requests==2.18.4
 numpy==1.13.3
 scipy==1.0.0
 Pillow==5.1.0
-fcn==6.3.0
-torchfcn==1.8.0
+visdom
+

@@ -4,6 +4,7 @@ FCN\check_points\
 FCN\__pycache__
 *.tar
 *.csv
+*.pyc
 utils\__pycache__
 __pycache__
 data\__pycache__\
