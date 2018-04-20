@@ -1,6 +1,6 @@
 FCNs in the Wild Pixel-level Adversarial and Constraint-based Adaptation.pdf  
 FCN\pretrain_model\  
-FCN\check_points\ 
+FCN\checkpoints\ 
 FCN\__pycache__
 *.tar
 *.csv

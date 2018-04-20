@@ -3,7 +3,7 @@
 pytorch implemention of this [arxiv paper](https://arxiv.org/abs/1612.02649)
 
 The FCN model used is papre [Multi-scale context aggregation by dilated convolutions](https://arxiv.org/abs/1511.07122)
-
+**note** not finished
 ### dataset
 
 ### requirements 

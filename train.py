@@ -57,7 +57,7 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-c', '--config', type=int, default=1,
 						choices=configurations.keys())
-	parser.add_argument('--resume', help='Checkpoint path', default = 'FCN/check_points/')
+	parser.add_argument('--resume', help='Checkpoint path', default = 'FCN/checkpoints/')
 	parser.add_argument('-transfer', type=bool, default=False)
 
 	args = parser.parse_args()
@@ -97,9 +97,9 @@ def main():
 			check_points = os.listdir(resume)
 			check_point = osp.join(resume, check_points[-1])
 			check_point = torch.load(check_point)
-			model.load_state_dict(checkpoint['model_state_dict'])
-			start_epoch = checkpoint['epoch']
-			start_iteration = checkpoint['iteration']
+			model.load_state_dict(check_point['model_state_dict'])
+			start_epoch = check_point['epoch']
+			start_iteration = check_point['iteration']
 	else:
 		#initialize the model
 		vgg = VGG16(pretrained=True)

@@ -22,7 +22,7 @@ class GTA5(data.Dataset):
   def __init__(self, root, split='train', transform=False):
     super(GTA5, self).__init__()
     
-    self.root = osp.join(self.root, 'GTA5')
+    self.root = osp.join(root, 'GTA5')
     if split != 'train':
       self.split = 'val'
     else:
@@ -33,7 +33,7 @@ class GTA5(data.Dataset):
     # GTA5 dataset direcory structer
     
     dataset_dir = osp.join(self.root, self.split)
-    self.files = collections.defaultdict(list)
+    self.files = []
 
     # for split in ['train', 'val']:
     imageset_files = osp.join(dataset_dir,
@@ -41,15 +41,15 @@ class GTA5(data.Dataset):
     with open(imageset_files) as f:
       for file in f:
         img_file = osp.join(dataset_dir,
-          '{split}/images/{file_name}'.format(split=split,file_name=file))
+          'images/{file_name}'.format(file_name=file))
         lbl_file = osp.join(dataset_dir,
-          '{split}/labels/{file_name}'.format(split=split,file_name=file))
+          'labels/{file_name}'.format(file_name=file))
         self.files.append({
           'img':img_file,
           'lbl':lbl_file,})
     
   def __len__(self):
-    return len(self.files[self.split])
+    return len(self.files)
 
 
   def __getitem__(self, index):

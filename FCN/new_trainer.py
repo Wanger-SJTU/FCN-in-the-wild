@@ -1,9 +1,10 @@
 
 import os
-import pdb
+import math
 import tqdm
 import torch
 import visdom
+import shutil
 import os.path as osp
 import numpy as np
 
@@ -49,7 +50,7 @@ class Trainer(object):
     if not osp.exists(self.out):
       os.makedirs(self.out)
 
-    self.checkpoint_dir = 'checkpoints'
+    self.checkpoint_dir = 'FCN\checkpoints'
     if not osp.exists(self.checkpoint_dir):
       os.makedirs(self.checkpoint_dir)
 
@@ -80,8 +81,7 @@ class Trainer(object):
       data, target = Variable(data, volatile=True), Variable(target)
       score = self.model(data)
 
-      loss = cross_entropy2d(score, target,
-                   size_average=self.size_average)
+      loss = CrossEntropyLoss2d(score, target)
       if np.isnan(float(loss.data[0])):
         raise ValueError('loss is nan while validating')
       
@@ -106,7 +106,7 @@ class Trainer(object):
       self.best_mean_iu = mean_iu
     
     filename = ('%s/epoch-%d.pth' \
-                    % (self.checkpoint_dir, self.iteration))
+                    % (self.checkpoint_dir, self.epoch))
     torch.save({
       'epoch': self.epoch,
       'iteration': self.iteration,
@@ -160,8 +160,7 @@ class Trainer(object):
       self.optim.zero_grad()
       
       score = self.model(data)
-      loss = cross_entropy2d(score, target,
-                   size_average=self.size_average)
+      loss = CrossEntropyLoss2d(score, target)
       loss /= len(data)
       
       if np.isnan(float(loss.data[0])):

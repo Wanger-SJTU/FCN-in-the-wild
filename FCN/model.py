@@ -12,7 +12,7 @@ from data.data_utils import get_label_classes
 
 class FCN(nn.Module):
 
-  def __init__(self, n_classes = max(get_label_classes)):
+  def __init__(self, n_classes = max(get_label_classes())):
     super(FCN, self).__init__()
     
     self.front_end = nn.Sequential(
