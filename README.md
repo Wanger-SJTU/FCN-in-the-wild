@@ -6,7 +6,16 @@ The FCN model used is papre [Multi-scale context aggregation by dilated convolut
 **note** not finished
 ### dataset
 
+- [GTA5 dataset](https://download.visinf.tu-darmstadt.de/data/from_games/)
+
 ### requirements 
+
+- tqdm
+- pytorch
+- numpy
+- scipy
+- Pillow
+- visdom
 
 ### training
 
