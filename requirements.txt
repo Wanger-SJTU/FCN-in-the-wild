@@ -8,7 +8,7 @@ mkl-fft==1.0.0
 mkl-random==1.0.1
 numpy==1.13.3
 olefile==0.45.1
-Pillow==4.4.0
+Pillow==8.1.1
 pycparser==2.18
 pyOpenSSL==17.5.0
 PySocks==1.6.8
