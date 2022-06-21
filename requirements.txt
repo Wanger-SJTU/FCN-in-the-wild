@@ -6,7 +6,7 @@ cryptography==2.2.2
 idna==2.6
 mkl-fft==1.0.0
 mkl-random==1.0.1
-numpy==1.13.3
+numpy==1.22.0
 olefile==0.45.1
 Pillow==4.4.0
 pycparser==2.18
